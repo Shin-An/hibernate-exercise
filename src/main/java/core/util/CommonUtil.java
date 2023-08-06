@@ -1,6 +1,6 @@
 package core.util;
 
-import static core.util.Constants.DATASOURCE;
+//import static core.util.Constants.DATASOURCE;
 import static core.util.Constants.GSON;
 import static core.util.Constants.JSON_MIME_TYPE;
 
@@ -16,13 +16,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
 public class CommonUtil {
-	
-	public static Connection getConnection() throws NamingException, SQLException {
-		if (DATASOURCE == null) {
-			DATASOURCE = (DataSource) new InitialContext().lookup("java:/comp/env/jdbc/javaFramework");
-		}
-		return DATASOURCE.getConnection();
-	}
+	// JDBC寫法
+//	public static Connection getConnection() throws NamingException, SQLException {
+//		if (DATASOURCE == null) {
+//			DATASOURCE = (DataSource) new InitialContext().lookup("java:/comp/env/jdbc/javaFramework");
+//		}
+//		return DATASOURCE.getConnection();
+//	}
 
 	public static <P> P json2Pojo(HttpServletRequest request, Class<P> classOfPojo) {
 		try (BufferedReader br = request.getReader()) {
