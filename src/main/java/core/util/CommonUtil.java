@@ -11,11 +11,22 @@ import java.sql.SQLException;
 
 import javax.naming.InitialContext;
 import javax.naming.NamingException;
+import javax.servlet.ServletContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 
+import org.springframework.context.ApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+
 public class CommonUtil {
+
+	// Spring 撰寫取得Bean元件的共⽤⽅法
+	public static <T> T getBean(ServletContext sc, Class<T> clazz) {
+		ApplicationContext context = WebApplicationContextUtils.getWebApplicationContext(sc);
+		return context.getBean(clazz);
+	}
+
 	// JDBC寫法
 //	public static Connection getConnection() throws NamingException, SQLException {
 //		if (DATASOURCE == null) {

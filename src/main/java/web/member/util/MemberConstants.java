@@ -4,5 +4,6 @@ import web.member.service.MemberService;
 import web.member.service.impl.MemberServiceImpl;
 
 public class MemberConstants {
-	public static final MemberService SERVICE = new MemberServiceImpl();
+//	public static final MemberService SERVICE = new MemberServiceImpl();
+	// 將此行註解，有紅叉叉的Servlet都要改
 }
