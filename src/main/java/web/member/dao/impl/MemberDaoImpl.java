@@ -2,6 +2,7 @@ package web.member.dao.impl;
 
 import java.util.List;
 
+import javax.persistence.PersistenceContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
@@ -17,12 +18,16 @@ import web.member.entity.Member;
 //@Component
 @Repository
 public class MemberDaoImpl implements MemberDao {
+	
+	// 跑單元測試才加上此行實體變數
+	@PersistenceContext
+	private Session session;
 
 	@Override
 	public int insert(Member member) {
 		
-		// Hibernate寫法
-		getSession().persist(member);
+		// Hibernate寫法 // getSession()改成 session
+		session.persist(member);
 		return 1;
 		
 		// JDBC寫法
@@ -44,8 +49,7 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public int deleteById(Integer id) {
 		
-		// Hibernate寫法
-		Session session = getSession();
+		// Hibernate寫法  // getSession()改成 session
 		Member member = session.get(Member.class, id);
 		session.remove(member);
 		return 1;
@@ -80,7 +84,7 @@ public class MemberDaoImpl implements MemberDao {
 		.append("lastUpdatedDate = NOW() ")
 		.append("WHERE username = :username");
 		
-		Query<?> query = getSession().createQuery(hql.toString());
+		Query<?> query = session.createQuery(hql.toString());
 		if (password != null && !password.isEmpty()) {
 			query.setParameter("password", password);
 		}
@@ -130,8 +134,8 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public Member selectById(Integer id) {
 		
-		// Hibernate寫法
-		return getSession().get(Member.class, id);
+		// Hibernate寫法 // getSession()改成 session
+		return session.get(Member.class, id);
 		
 		// JDBC寫法
 //		final String sql = "select * from MEMBER where ID = ?";
@@ -165,7 +169,8 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public List<Member> selectAll() {
 		final String hql = "FROM Member ORDER BY id";
-		return getSession()
+		// getSession()改成 session
+		return session
 				.createQuery(hql, Member.class)
 				.getResultList();
 
@@ -198,8 +203,7 @@ public class MemberDaoImpl implements MemberDao {
 	@Override
 	public Member selectByUsername(String username) {
 		
-		// Criteria寫法
-		Session session = getSession();
+		// Criteria寫法 // getSession()改成 session
 		CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
 		CriteriaQuery<Member> criteriaQuery = criteriaBuilder.createQuery(Member.class);
 		Root<Member> root = criteriaQuery.from(Member.class);
@@ -237,12 +241,14 @@ public class MemberDaoImpl implements MemberDao {
 //		return null;
 	}
 	
+	
 	@Override
 	public Member selectForLogin(String username, String password) {
 		
 		// Native
 		final String sql = "select * from MEMBER where USERNAME = :username and PASSWORD = :password";
-		return getSession()
+		// 跑單元測試前為 Session.getSession()
+		return session
 				.createNativeQuery(sql, Member.class)
 				.setParameter("username", username)
 				.setParameter("password", password)

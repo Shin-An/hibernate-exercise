@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import web.member.dao.MemberDao;
 //import web.member.dao.impl.MemberDaoImpl;
@@ -11,6 +12,7 @@ import web.member.entity.Member;
 import web.member.service.MemberService;
 
 @Service
+@Transactional // 加在類別的上面，等於類別內的所有方法都有交易控制註解
 public class MemberServiceImpl implements MemberService {
 	
 	@Autowired
@@ -20,6 +22,8 @@ public class MemberServiceImpl implements MemberService {
 //		dao = new MemberDaoImpl();
 //	}
 	
+//	Ctrl+左鍵按 Transactional 看原始碼，rollbackFor方法，此處代表Exception以下的延伸類別例外均可處理
+//	@Transactional(rollbackFor = Exception.class)
 	@Override
 	public Member register(Member member) {
 		if (member.getUsername() == null) {
